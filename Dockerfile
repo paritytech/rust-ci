@@ -14,10 +14,12 @@ RUN apt -y update && \
 # binutils binutils-dev snapcraft gettext file python build-essential time zip dpkg-dev rpm libssl-dev openssl ruby-dev
 
 # install rustup
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+# RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 
 # rustup directory
-ENV PATH /root/.cargo/bin:$PATH
+# ENV PATH /root/.cargo/bin:$PATH
+
+RUN cargo install cargo-audit
 
 # setup rust beta and nightly channel's
 # discuss:
