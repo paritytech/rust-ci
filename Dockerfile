@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM rust:stretch
 MAINTAINER Parity Technologies <devops@parity.io>
 
 WORKDIR /build
