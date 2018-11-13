@@ -8,7 +8,10 @@ RUN apt-get -y update && \
   apt-get install -y --no-install-recommends \
 	software-properties-common curl git \
 	make cmake ca-certificates g++ rhash \
-    gcc pkg-config libudev-dev
+    gcc pkg-config libudev-dev time
+
+# removed:
+# binutils binutils-dev snapcraft gettext file python build-essential zip dpkg-dev rpm libssl-dev openssl ruby-dev
 
 RUN cargo install cargo-audit
 
