@@ -1,5 +1,5 @@
 FROM rust:stretch AS base
-MAINTAINER Parity Technologies <devops@parity.io>
+LABEL maintainer="Parity Technologies <devops@parity.io>"
 
 WORKDIR /build
 
@@ -35,5 +35,10 @@ FROM base AS crosscompile
 # windows compilation
 RUN apt-get install -y --no-install-recommends mingw-w64
 RUN rustup target add x86_64-pc-windows-gnu
+
+ENV CC_x86_64_pc_windows_gnu i686-w64-mingw32-gcc
+ENV CXX_x86_64_pc_windows_gnu i686-w64-mingw32-g++
+ENV AR_x86_64_pc_windows_gnu i686-w64-mingw32-ar
+
 # darwin compilation
 RUN rustup target add x86_64-apple-darwin
