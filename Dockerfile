@@ -36,9 +36,23 @@ FROM base AS crosscompile
 RUN apt-get install -y --no-install-recommends mingw-w64
 RUN rustup target add x86_64-pc-windows-gnu
 
-ENV CC_x86_64_pc_windows_gnu i686-w64-mingw32-gcc
-ENV CXX_x86_64_pc_windows_gnu i686-w64-mingw32-g++
-ENV AR_x86_64_pc_windows_gnu i686-w64-mingw32-ar
+ENV CC_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc
+ENV CXX_x86_64_pc_windows_gnu x86_64-w64-mingw32-g++
+ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-ar
+# TL;DR add the /wd 5045 flag when compiling with MSVC and it should solve this specific problem.
+# ENV CL /wd5045
+
+# Libusb
+ARG USB_VERSION=v1.0.22
+ARG USB_HASH=0034b2afdcdb1614e78edaa2a9e22d5936aeae5d
+RUN set -ex \
+    && git clone https://github.com/libusb/libusb.git -b ${USB_VERSION} \
+    && cd libusb \
+    && test `git rev-parse HEAD` = ${USB_HASH} || exit 1 \
+    && ./autogen.sh \
+    && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure --disable-shared \
+    && make \
+&& make install
 
 # darwin compilation
 RUN rustup target add x86_64-apple-darwin
