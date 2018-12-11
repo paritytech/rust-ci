@@ -1,3 +1,8 @@
+# cross-windows settings 
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc-posix"
+
+# cross-android settings
 [target.armv7-linux-androideabi]
 linker = "arm-linux-androideabi-clang"
 ar = "arm-linux-androideabi-ar"
