@@ -30,7 +30,7 @@ ENV CC gcc
 ENV CXX g++
 
 # windows compilation
-FROM base AS cross-windows
+# FROM base AS cross-windows
 
 RUN apt-get install -y --no-install-recommends mingw-w64
 RUN rustup target add x86_64-pc-windows-gnu
