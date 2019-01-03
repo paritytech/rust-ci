@@ -1,19 +1,22 @@
-# rust-ci
-WIP: New CI implementation
+# WIP: New CI implementation
 
-# How to crosscompile parity-eth for windows:
+## How to crosscompile parity-eth for windows:
+1. build and run docker container
 ```
 git clone https://github.com/paritytech/rust-ci.git
 cd rust-ci
 docker build -t crossy .
 docker run -it --rm crossy 
 ```
-inside the container:
+2. inside the container:
 ```
 export CARGO_HOME=$CARGO_HOME
 export CARGO_TARGET=x86_64-pc-windows-gnu
 export CI_SERVER_NAME="Gitlab CI"
+```
+3. patch Libusb:
 
+```
 git clone https://github.com/paritytech/libusb-sys.git
 cd libusb-sys/
 apt install nano
@@ -21,11 +24,11 @@ nano build.rs
 ```
 change this file according to: https://github.com/paritytech/libusb-sys/issues/5
 
-patch Libusb:
 ```
 nano libusb/libusb/libusbi.h
 ```
 change this line: 
+
 `#if (defined(OS_WINDOWS) || defined(OS_WINCE)) && !defined(__GNUC__)`
 
 to 
@@ -35,11 +38,10 @@ to
 cargo build --release --target x86_64-pc-windows-gnu
 cd /build
 ```
-proceed to Parity-Ethereum:
+4. proceed to Parity-Ethereum:
 ```
 git clone https://github.com/paritytech/parity-ethereum.git
 cd parity-ethereum
-cargo update -p parity-rocksdb-sys
 nano Cargo.toml
 ```
 this should be inserted into `Cargo.toml`:
@@ -62,34 +64,35 @@ time cargo build --target $CARGO_TARGET --release --features final
 
 ```
 # Notes
-windows-cc troubles:
-solved issue with rocksdb:
-https://github.com/paritytech/rust-rocksdb/pull/27
-and old dependencies:
-https://github.com/paritytech/parity-ethereum/pull/10082
+## windows-cc troubles:
+[x] issues with rocksdb:
+- https://github.com/paritytech/rust-rocksdb/pull/27
 
-not-yet solved libusb issue:
-https://github.com/paritytech/libusb-sys/issues/5
-	here we wait for official lib to be fixed:
-	https://github.com/libusb/libusb/pull/242
+[x] and old dependencies:
+- https://github.com/paritytech/parity-ethereum/pull/10082
+- https://github.com/paritytech/parity-ethereum/pull/10124
 
-android-cc troubles:
-solved:
-https://github.com/paritytech/rust-snappy/pull/9
-https://github.com/paritytech/rust-rocksdb/pull/25
-and
-https://github.com/paritytech/libusb-sys/pull/4 
+[ ] libusb issue:
+- https://github.com/paritytech/libusb-sys/issues/5
 
-now it seems like we are waiting for official libusb
+[ ]	now we wait for official lib to be fixed:
+- https://github.com/libusb/libusb/pull/242
 
-maybe android will loose the libusb:
-https://github.com/paritytech/parity-ethereum/issues/10058
+## android-cc troubles:
+- [x] https://github.com/paritytech/rust-snappy/pull/9
+- [x] https://github.com/paritytech/rust-rocksdb/pull/25
+- [x] https://github.com/paritytech/libusb-sys/pull/4 
 
-but it will be supported in other places:
-https://github.com/paritytech/parity-ethereum/pull/10055
+[ ] now we wait for official libusb
 
-- check if --locked works: not yet
-https://github.com/paritytech/parity-ethereum/pull/10105/files
+[ ] maybe android will loose the libusb:
+- https://github.com/paritytech/parity-ethereum/issues/10058
 
-- manual:
-https://github.com/paritytech/rust-ci/edit/master/README.md
+[ ] but it will be supported in other places:
+- https://github.com/paritytech/parity-ethereum/pull/10055
+
+[ ] --locked
+- https://github.com/paritytech/parity-ethereum/pull/10105/files
+
+[x] manual:
+- https://github.com/paritytech/rust-ci/edit/master/README.md
