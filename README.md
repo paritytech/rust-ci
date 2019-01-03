@@ -65,17 +65,17 @@ time cargo build --target $CARGO_TARGET --release --features final
 ```
 # Notes
 ## windows-cc troubles:
-[x] issues with rocksdb:
-- https://github.com/paritytech/rust-rocksdb/pull/27
+issues with rocksdb:
+- [x] https://github.com/paritytech/rust-rocksdb/pull/27
 
-[x] and old dependencies:
-- https://github.com/paritytech/parity-ethereum/pull/10082
-- https://github.com/paritytech/parity-ethereum/pull/10124
+and old dependencies:
+- [x] https://github.com/paritytech/parity-ethereum/pull/10082
+- [x] https://github.com/paritytech/parity-ethereum/pull/10124
 
-[ ] libusb issue:
+- [ ] libusb issue:
 - https://github.com/paritytech/libusb-sys/issues/5
 
-[ ]	now we wait for official lib to be fixed:
+- [ ] now we wait for official lib to be fixed:
 - https://github.com/libusb/libusb/pull/242
 
 ## android-cc troubles:
@@ -83,16 +83,16 @@ time cargo build --target $CARGO_TARGET --release --features final
 - [x] https://github.com/paritytech/rust-rocksdb/pull/25
 - [x] https://github.com/paritytech/libusb-sys/pull/4 
 
-[ ] now we wait for official libusb
+- [ ] now we wait for official libusb
 
-[ ] maybe android will loose the libusb:
+- [ ] maybe android will loose the libusb:
 - https://github.com/paritytech/parity-ethereum/issues/10058
 
-[ ] but it will be supported in other places:
+- [ ] but it will be supported in other places:
 - https://github.com/paritytech/parity-ethereum/pull/10055
 
-[ ] --locked
+- [ ] --locked
 - https://github.com/paritytech/parity-ethereum/pull/10105/files
 
-[x] manual:
+- [x] manual:
 - https://github.com/paritytech/rust-ci/edit/master/README.md
