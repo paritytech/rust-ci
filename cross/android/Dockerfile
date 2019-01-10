@@ -52,11 +52,7 @@ RUN rm -rf /root/eudev
 RUN rm /root/libudev.patch
 
 # Rust-related configuration
-# ?
-# ENV PATH /.cargo/:$PATH
-
 ADD cargo-config.toml /.cargo/config
-# ENV PATH /usr/local/cargo/:$PATH
 ENV ARM_LINUX_ANDROIDEABI_OPENSSL_DIR /opt/ndk-standalone/sysroot/usr
 ENV ARMV7_LINUX_ANDROIDEABI_OPENSSL_DIR /opt/ndk-standalone/sysroot/usr
 ENV CC_arm_linux_androideabi arm-linux-androideabi-clang
@@ -84,6 +80,6 @@ RUN apt autoremove -y
 RUN apt clean -y
 RUN rm -rf /tmp/* /var/tmp/*
 
-RUN apt-get install -y --no-install-recommends \
-    file build-essential bison flex lib32stdc++6 lib32z1 python \
-    autotools-dev automake autoconf libtool docbook-xsl
+# RUN apt-get install -y --no-install-recommends \
+#     file build-essential bison flex lib32stdc++6 lib32z1 python \
+#         autotools-dev automake autoconf libtool docbook-xsl
