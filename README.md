@@ -63,6 +63,17 @@ time cargo build --target $CARGO_TARGET --release --features final
 # --locked flag doesn't work for now
 
 ```
+## How to crosscompile parity-eth for android:
+export CARGO_HOME=$CARGO_HOME
+export CARGO_TARGET=armv7-linux-androideabi
+export CI_SERVER_NAME="Gitlab CI"
+
+git clone https://github.com/paritytech/parity-ethereum.git
+cd parity-ethereum
+./scripts/gitlab/build-unix.sh 
+
+- [x] Android cross-compilation should work in CI.
+
 # Notes
 ## windows-cc troubles:
 issues with rocksdb:
@@ -78,19 +89,16 @@ and old dependencies:
 - [ ] now we wait for official lib to be fixed:
 - https://github.com/libusb/libusb/pull/242
 
-## android-cc troubles:
+- [ ] and should work:
+- https://github.com/paritytech/parity-ethereum/pull/10055
+## android-cc all problems are solved:
 - [x] https://github.com/paritytech/rust-snappy/pull/9
 - [x] https://github.com/paritytech/rust-rocksdb/pull/25
 - [x] https://github.com/paritytech/libusb-sys/pull/4 
-
-- [ ] now we wait for official libusb
-
-- [ ] maybe android will loose the libusb:
+- [x] android has lost libusb support:
 - https://github.com/paritytech/parity-ethereum/issues/10058
 
-- [ ] but it will be supported in other places:
-- https://github.com/paritytech/parity-ethereum/pull/10055
-
+## Misc
 - [ ] --locked
 - https://github.com/paritytech/parity-ethereum/pull/10105/files
 
