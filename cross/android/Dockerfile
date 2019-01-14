@@ -6,9 +6,7 @@ RUN apt-get install -y --no-install-recommends \
     curl git \
     cmake ca-certificates g++ rhash \
     libudev-dev time \
-    unzip wget 
-    # xsltproc 
-    # gperf
+    unzip wget xsltproc gperf
 # removed:
 # sudo file build-essential bison flex lib32stdc++6 lib32z1 python 
 # autotools-dev automake autoconf libtool docbook-xsl
