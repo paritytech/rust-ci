@@ -39,7 +39,7 @@ RUN cd /root && \
     git clone https://github.com/gentoo/eudev.git
 ADD libudev.patch /root
 RUN cd /root/eudev && \
-    git checkout 83d918449f22720d84a341a05e24b6d109e6d3ae &&  \
+    git checkout 83d918449f22720d84a341a05e24b6d109e6d3ae && \
     ./autogen.sh && \
     ./configure --disable-introspection --disable-programs --disable-hwdb \
                 --host=arm-linux-androideabi --prefix=/opt/ndk-standalone/sysroot/usr/ \
