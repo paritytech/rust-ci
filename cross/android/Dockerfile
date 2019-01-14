@@ -4,13 +4,12 @@ LABEL maintainer="Parity Technologies <devops@parity.io>"
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     git \
-    cmake g++ \
+    cmake ca-certificates g++ \
     libudev-dev time \
     unzip wget 
     # xsltproc 
     # gperf
     # curl
-    # ca-certificates
     # rhash
 # removed:
 # sudo file build-essential bison flex lib32stdc++6 lib32z1 python 
