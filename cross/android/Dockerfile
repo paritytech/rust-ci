@@ -76,6 +76,6 @@ ENV CXX g++
 ENV RUST_BACKTRACE 1
 
 # cleanup
-RUN apt autoremove -y
-RUN apt clean -y
+RUN apt-get autoremove -y
+RUN apt-get clean -y
 RUN rm -rf /tmp/* /var/tmp/*
