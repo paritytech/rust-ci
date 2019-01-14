@@ -3,10 +3,15 @@ LABEL maintainer="Parity Technologies <devops@parity.io>"
 
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
-    curl git \
-    cmake ca-certificates g++ rhash \
+    git \
+    cmake g++ \
     libudev-dev time \
-    unzip wget xsltproc gperf
+    unzip wget 
+    # xsltproc 
+    # gperf
+    # curl
+    # ca-certificates
+    # rhash
 # removed:
 # sudo file build-essential bison flex lib32stdc++6 lib32z1 python 
 # autotools-dev automake autoconf libtool docbook-xsl
@@ -79,7 +84,3 @@ ENV RUST_BACKTRACE 1
 RUN apt autoremove -y
 RUN apt clean -y
 RUN rm -rf /tmp/* /var/tmp/*
-
-# RUN apt-get install -y --no-install-recommends \
-#     file build-essential bison flex lib32stdc++6 lib32z1 python \
-#         autotools-dev automake autoconf libtool docbook-xsl
