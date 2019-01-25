@@ -28,6 +28,8 @@ ENV RUST_BACKTRACE 1
 ENV CC gcc
 ENV CXX g++
 
+# fixme
+ENV CARGO_TARGET x86_64-unknown-linux-gnu
 RUN cargo build --target $CARGO_TARGET --release --features final && \
 	cargo build --target $CARGO_TARGET --release -p evmbin && \
 	cargo build --target $CARGO_TARGET --release -p ethstore-cli && \
