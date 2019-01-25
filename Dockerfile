@@ -4,8 +4,8 @@ LABEL maintainer="Parity Technologies <devops@parity.io>"
 WORKDIR /build
 
 # install tools and dependencies
-RUN apt-get -y update
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get -y update && \
+	apt-get install -y --no-install-recommends \
 	software-properties-common curl git \
 	make cmake ca-certificates g++ rhash \
   	gcc pkg-config libudev-dev time
@@ -13,21 +13,26 @@ RUN apt-get install -y --no-install-recommends \
 # removed:
 # binutils binutils-dev snapcraft gettext file python build-essential zip dpkg-dev rpm libssl-dev openssl ruby-dev
 
-
 RUN cargo install cargo-audit
+
+# cleanup
+RUN echo cleanup && \
+	apt-get autoremove -y && \
+	apt-get clean -y && \
+	rm -rf /tmp/* /var/tmp/*
 
 # show backtraces
 ENV RUST_BACKTRACE 1
 
-# cleanup
-RUN echo cleanup
-RUN apt-get autoremove -y
-RUN apt-get clean -y
-RUN rm -rf /tmp/* /var/tmp/*
-
 # compiler ENV
 ENV CC gcc
 ENV CXX g++
+
+RUN cargo build --target $CARGO_TARGET --release --features final && \
+	cargo build --target $CARGO_TARGET --release -p evmbin && \
+	cargo build --target $CARGO_TARGET --release -p ethstore-cli && \
+	cargo build --target $CARGO_TARGET --release -p ethkey-cli && \
+	cargo build --target $CARGO_TARGET --release -p whisper-cli
 
 # windows compilation
 # FROM base AS cross-windows
