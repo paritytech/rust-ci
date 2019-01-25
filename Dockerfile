@@ -28,6 +28,9 @@ ENV RUST_BACKTRACE 1
 ENV CC gcc
 ENV CXX g++
 
+RUN git clone https://github.com/paritytech/parity-ethereum.git && \
+	cd parity-ethereum
+
 # fixme
 ENV CARGO_TARGET x86_64-unknown-linux-gnu
 RUN cargo build --target $CARGO_TARGET --release --features final && \
