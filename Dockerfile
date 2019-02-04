@@ -1,19 +1,20 @@
 FROM rust:stretch AS base
 LABEL maintainer="Parity Technologies <devops@parity.io>"
 
-WORKDIR /build
-
 # install tools and dependencies
 RUN apt-get -y update && \
 	apt-get install -y --no-install-recommends \
 	software-properties-common curl git \
 	make cmake ca-certificates g++ rhash \
-  	gcc pkg-config libudev-dev time
+	gcc pkg-config libudev-dev time
 
 # removed:
 # binutils binutils-dev snapcraft gettext file python build-essential zip dpkg-dev rpm libssl-dev openssl ruby-dev
 
-RUN cargo install cargo-audit
+RUN mkdir /parity-ethereum
+WORKDIR /parity-ethereum
+
+RUN cargo install cargo-audit sccache
 
 # cleanup
 RUN echo cleanup && \
@@ -27,28 +28,25 @@ ENV RUST_BACKTRACE 1
 # compiler ENV
 ENV CC gcc
 ENV CXX g++
-
-RUN git clone https://github.com/paritytech/parity-ethereum.git && \
-	cd parity-ethereum
-
-# fixme
 ENV CARGO_TARGET x86_64-unknown-linux-gnu
-RUN cargo build --target $CARGO_TARGET --release --features final && \
-	cargo build --target $CARGO_TARGET --release -p evmbin && \
-	cargo build --target $CARGO_TARGET --release -p ethstore-cli && \
-	cargo build --target $CARGO_TARGET --release -p ethkey-cli && \
-	cargo build --target $CARGO_TARGET --release -p whisper-cli
+ENV CARGO_HOME /parity-ethereum/.cargo/
+ENV RUSTC_WRAPPER sccache
+
+# FIXME: change git policy to fetch
+# RUN git clone https://github.com/paritytech/parity-ethereum.git .
+
+VOLUME /parity-ethereum/target $CARGO_HOME
 
 # windows compilation
 # FROM base AS cross-windows
 
-RUN apt-get install -y --no-install-recommends mingw-w64
-RUN rustup target add x86_64-pc-windows-gnu
+#RUN apt-get install -y --no-install-recommends mingw-w64
+#RUN rustup target add x86_64-pc-windows-gnu
 
 #new
-ENV CC_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-posix
-ENV CXX_x86_64_pc_windows_gnu x86_64-w64-mingw32-g++-posix
-ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-ar
+#ENV CC_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-posix
+#ENV CXX_x86_64_pc_windows_gnu x86_64-w64-mingw32-g++-posix
+#ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-ar
 
 #RUN echo -e '\n[target.x86_64-pc-windows-gnu]\nlinker = "x86_64-w64-mingw32-gcc-posix"\n' >> parity-ethereum/.cargo/config
 
@@ -68,9 +66,9 @@ ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-ar
 # && make install
 
 # darwin compilation
-FROM base AS cross-darwin
+#FROM base AS cross-darwin
 
-RUN rustup target add x86_64-apple-darwin
+#RUN rustup target add x86_64-apple-darwin
 
 # android compilation
-FROM base AS cross-android
+#FROM base AS cross-android
