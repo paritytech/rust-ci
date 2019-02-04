@@ -39,8 +39,7 @@ ENV CARGO_TARGET x86_64-unknown-linux-gnu
 ENV CARGO_HOME /parity-ethereum/.cargo/
 ENV RUSTC_WRAPPER sccache
 
-# FIXME: change git policy to fetch
-# RUN git clone https://github.com/paritytech/parity-ethereum.git .
+RUN git clone https://github.com/paritytech/parity-ethereum.git .
 
 VOLUME /parity-ethereum/target $CARGO_HOME
 
