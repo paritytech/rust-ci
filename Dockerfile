@@ -1,44 +1,52 @@
 FROM rust:stretch AS base
 LABEL maintainer="Parity Technologies <devops@parity.io>"
 
-WORKDIR /build
-
 # install tools and dependencies
-RUN apt-get -y update
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get -y update && \
+	apt-get install -y --no-install-recommends \
 	software-properties-common curl git \
 	make cmake ca-certificates g++ rhash \
-  	gcc pkg-config libudev-dev time
+	gcc pkg-config libudev-dev time
 
 # removed:
 # binutils binutils-dev snapcraft gettext file python build-essential zip dpkg-dev rpm libssl-dev openssl ruby-dev
 
+RUN mkdir /parity-ethereum
+WORKDIR /parity-ethereum
 
-RUN cargo install cargo-audit
+RUN cargo install cargo-audit sccache
+
+# cleanup
+RUN echo cleanup && \
+	apt-get autoremove -y && \
+	apt-get clean -y && \
+	rm -rf /tmp/* /var/tmp/*
 
 # show backtraces
 ENV RUST_BACKTRACE 1
 
-# cleanup
-RUN echo cleanup
-RUN apt-get autoremove -y
-RUN apt-get clean -y
-RUN rm -rf /tmp/* /var/tmp/*
-
 # compiler ENV
 ENV CC gcc
 ENV CXX g++
+ENV CARGO_TARGET x86_64-unknown-linux-gnu
+ENV CARGO_HOME /parity-ethereum/.cargo/
+ENV RUSTC_WRAPPER sccache
+
+# FIXME: change git policy to fetch
+# RUN git clone https://github.com/paritytech/parity-ethereum.git .
+
+VOLUME /parity-ethereum/target $CARGO_HOME
 
 # windows compilation
 # FROM base AS cross-windows
 
-RUN apt-get install -y --no-install-recommends mingw-w64
-RUN rustup target add x86_64-pc-windows-gnu
+#RUN apt-get install -y --no-install-recommends mingw-w64
+#RUN rustup target add x86_64-pc-windows-gnu
 
 #new
-ENV CC_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-posix
-ENV CXX_x86_64_pc_windows_gnu x86_64-w64-mingw32-g++-posix
-ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-ar
+#ENV CC_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-posix
+#ENV CXX_x86_64_pc_windows_gnu x86_64-w64-mingw32-g++-posix
+#ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-ar
 
 #RUN echo -e '\n[target.x86_64-pc-windows-gnu]\nlinker = "x86_64-w64-mingw32-gcc-posix"\n' >> parity-ethereum/.cargo/config
 
@@ -58,9 +66,9 @@ ENV AR_x86_64_pc_windows_gnu x86_64-w64-mingw32-gcc-ar
 # && make install
 
 # darwin compilation
-FROM base AS cross-darwin
+#FROM base AS cross-darwin
 
-RUN rustup target add x86_64-apple-darwin
+#RUN rustup target add x86_64-apple-darwin
 
 # android compilation
-FROM base AS cross-android
+#FROM base AS cross-android
