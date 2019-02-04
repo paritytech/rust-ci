@@ -39,7 +39,8 @@ ENV CARGO_TARGET x86_64-unknown-linux-gnu
 ENV CARGO_HOME /parity-ethereum/.cargo/
 ENV RUSTC_WRAPPER sccache
 
-RUN git clone https://github.com/paritytech/parity-ethereum.git .
+RUN git clone https://github.com/paritytech/parity-ethereum.git . && \
+		git submodule update --init --recursive
 
 VOLUME /parity-ethereum/target $CARGO_HOME
 
